@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THE JANE PROTOCOL: Operational Playbook</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Font: Inter & JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            dark: '#0B0D12',
+                            card: '#121620',
+                            border: '#1E2638',
+                            purple: '#8B5CF6',
+                            purpleLight: '#A78BFA',
+                            red: '#EF4444',
+                            cyan: '#06B6D4',
+                            gold: '#F59E0B'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0B0D12;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1E2638;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #8B5CF6;
+        }
+        
+        .glow-purple {
+            box-shadow: 0 0 25px -5px rgba(139, 92, 246, 0.3);
+        }
+        .glow-red {
+            box-shadow: 0 0 25px -5px rgba(239, 68, 68, 0.3);
+        }
+        .glow-cyan {
+            box-shadow: 0 0 25px -5px rgba(6, 182, 212, 0.3);
+        }
+    </style>
+</head>
+<body class="bg-brand-dark text-gray-200 font-sans min-h-screen flex flex-col antialiased selection:bg-purple-600 selection:text-white">
+
+    <!-- Top Reading Progress Bar -->
+    <div class="fixed top-0 left-0 w-full h-1 bg-brand-border z-50">
+        <div id="progress-bar" class="h-full bg-gradient-to-r from-cyan-500 via-purple-500 to-red-500 w-0 transition-all duration-150"></div>
+    </div>
+
+    <!-- Header / Navbar -->
+    <header class="sticky top-0 bg-brand-dark/90 backdrop-blur-md border-b border-brand-border z-40 px-4 lg:px-8 py-3 flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+            <button id="mobile-menu-btn" class="lg:hidden text-gray-400 hover:text-white focus:outline-none">
+                <i class="fa-solid fa-bars text-xl"></i>
+            </button>
+            <div class="flex items-center space-x-2">
+                <span class="inline-block w-3 h-3 rounded-full bg-purple-500 animate-pulse"></span>
+                <span class="font-mono font-extrabold text-lg tracking-wider text-white">JANE<span class="text-purple-400">.PROTOCOL</span></span>
+            </div>
+            <span class="hidden sm:inline-block px-2 py-0.5 text-xs font-mono bg-purple-950/80 border border-purple-800/50 text-purple-300 rounded">CLASSIFIED PLAYBOOK</span>
+        </div>
+
+        <div class="flex items-center space-x-3 text-sm">
+            <button onclick="toggleBookmarksModal()" class="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-brand-card hover:bg-brand-border text-gray-300 border border-brand-border transition">
+                <i class="fa-regular fa-bookmark text-purple-400"></i>
+                <span class="hidden sm:inline">Bookmarks</span>
+                <span id="bookmark-count" class="ml-1 px-1.5 py-0.2 bg-purple-900/60 text-purple-300 rounded-full text-xs font-mono">0</span>
+            </button>
+            <a href="#simulator" class="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-purple-600 hover:bg-purple-500 text-white font-medium transition shadow-lg shadow-purple-600/30">
+                <i class="fa-solid fa-gamepad"></i>
+                <span class="hidden md:inline">Simulator</span>
+            </a>
+        </div>
+    </header>
+
+    <div class="flex-1 flex overflow-hidden">
+
+        <!-- Sidebar Navigation -->
+        <aside id="sidebar" class="fixed inset-y-0 left-0 transform -translate-x-full lg:translate-x-0 lg:static z-30 w-72 bg-brand-card/95 border-r border-brand-border transition-transform duration-200 ease-in-out flex flex-col justify-between pt-16 lg:pt-0">
+            <div class="p-4 overflow-y-auto max-h-[calc(100vh-8rem)]">
+                <div class="text-xs font-mono text-gray-400 uppercase tracking-widest px-3 mb-3">Tactical Navigation</div>
+                <nav class="space-y-1" id="nav-links">
+                    <a href="#intro" class="nav-item flex items-center px-3 py-2.5 rounded-lg text-sm font-medium text-purple-400 bg-purple-950/40 border border-purple-800/30">
+                        <i class="fa-solid fa-brain w-6 text-center"></i>
+                        <span>Introduction: Leverage</span>
+                    </a>
+                    <a href="#module-1" class="nav-item flex items-center px-3 py-2.5 rounded-lg text-sm font-medium text-gray-400 hover:text-gray-200 hover:bg-brand-border/50">
+                        <i class="fa-solid fa-eye w-6 text-center"></i>
+                        <span>Mod 1: The Baseline Hack</span>
+                    </a>
+                    <a href="#module-2" class="nav-item flex items-center px-3 py-2.5 rounded-lg text-sm font-medium text-gray-400 hover:text-gray-200 hover:bg-brand-border/50">
+                        <i class="fa-solid fa-wand-magic-sparkles w-6 text-center"></i>
+                        <span>Mod 2: The Barnum Effect</span>
+                    </a>
+                    <a href="#module-3" class="nav-item flex items-center px-3 py-2.5 rounded-lg text-sm font-medium text-gray-400 hover:text-gray-200 hover:bg-brand-border/50">
+                        <i class="fa-solid fa-bolt w-6 text-center"></i>
+                        <span>Mod 3: Pattern Interrupt</span>
+                    </a>
+                    <a href="#module-4" class="nav-item flex items-center px-3 py-2.5 rounded-lg text-sm font-medium text-gray-400 hover:text-gray-200 hover:bg-brand-border/50">
+                        <i class="fa-solid fa-mask w-6 text-center"></i>
+                        <span>Mod 4: Incongruence Spike</span>
+                    </a>
+                    <a href="#module-5" class="nav-item flex items-center px-3 py-2.5 rounded-lg text-sm font-medium text-gray-400 hover:text-gray-200 hover:bg-brand-border/50">
+                        <i class="fa-solid fa-magnet w-6 text-center"></i>
+                        <span>Mod 5: Psychological Force</span>
+                    </a>
+                    <a href="#module-6" class="nav-item flex items-center px-3 py-2.5 rounded-lg text-sm font-medium text-gray-400 hover:text-gray-200 hover:bg-brand-border/50">
+                        <i class="fa-solid fa-chess-king w-6 text-center"></i>
+                        <span>Mod 6: Social Command</span>
+                    </a>
+                    <div class="pt-4 border-t border-brand-border mt-4">
+                        <div class="text-xs font-mono text-gray-400 uppercase tracking-widest px-3 mb-2">Interactive Tools</div>
+                        <a href="#tool-baseline" class="nav-item flex items-center px-3 py-2 rounded-lg text-xs font-mono text-cyan-400 hover:bg-cyan-950/30">
+                            <i class="fa-solid fa-stopwatch w-5"></i> 7-Sec Baseline Lab
+                        </a>
+                        <a href="#tool-barnum" class="nav-item flex items-center px-3 py-2 rounded-lg text-xs font-mono text-purple-400 hover:bg-purple-950/30">
+                            <i class="fa-solid fa-sliders w-5"></i> Barnum Statement Forge
+                        </a>
+                        <a href="#simulator" class="nav-item flex items-center px-3 py-2 rounded-lg text-xs font-mono text-red-400 hover:bg-red-950/30">
+                            <i class="fa-solid fa-bullseye w-5"></i> Real-World Scenarios
+                        </a>
+                    </div>
+                </nav>
+            </div>
+            <div class="p-4 border-t border-brand-border bg-brand-dark/50">
+                <div class="flex items-center justify-between text-xs text-gray-400">
+                    <span>Status: <span class="text-emerald-400">UNLOCKED</span></span>
+                    <span>v2.4 Exec</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="flex-1 overflow-y-auto px-4 sm:px-6 lg:px-12 py-8 space-y-16 max-w-5xl mx-auto" id="main-scroll">
+
+            <!-- Hero Section -->
+            <section id="intro" class="relative rounded-2xl bg-gradient-to-b from-brand-card to-brand-dark border border-brand-border p-6 sm:p-10 glow-purple overflow-hidden">
+                <div class="absolute -top-24 -right-24 w-72 h-72 bg-purple-600/10 rounded-full blur-3xl pointer-events-none"></div>
+                <div class="absolute -bottom-24 -left-24 w-72 h-72 bg-cyan-600/10 rounded-full blur-3xl pointer-events-none"></div>
+
+                <div class="relative z-10 space-y-6">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-500/10 border border-red-500/30 text-red-400 text-xs font-mono">
+                        <i class="fa-solid fa-triangle-exclamation"></i> ETHICAL WARNING: RESTRICTED PSYCHOLOGICAL OPERATIONAL PLAYBOOK
+                    </div>
+
+                    <h1 class="text-3xl sm:text-5xl font-black tracking-tight text-white uppercase">
+                        THE JANE <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-cyan-400 to-red-400">PROTOCOL</span>
+                    </h1>
+                    <p class="text-gray-300 text-base sm:text-lg max-w-2xl leading-relaxed">
+                        Everyone wants to be Patrick Jane. No one knows the actual psychology behind the tricks.
+                        You watch <em class="text-purple-300">The Mentalist</em> and see micro-expressions, cold reads, and instant dominance.
+                        It isn't magic—it is <strong class="text-white border-b border-cyan-400">Behavioral Leverage</strong>.
+                    </p>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 text-xs font-mono">
+                        <div class="bg-brand-dark/80 p-3 rounded-lg border border-brand-border">
+                            <span class="text-gray-400 block mb-1">PAGES / EXECUTION</span>
+                            <span class="text-cyan-400 font-bold text-base">15-PAGE PLAYBOOK</span>
+                        </div>
+                        <div class="bg-brand-dark/80 p-3 rounded-lg border border-brand-border">
+                            <span class="text-gray-400 block mb-1">CORE MECHANIC</span>
+                            <span class="text-purple-400 font-bold text-base">BEHAVIORAL LEVERAGE</span>
+                        </div>
+                        <div class="bg-brand-dark/80 p-3 rounded-lg border border-brand-border">
+                            <span class="text-gray-400 block mb-1">ACCESSIBILITY</span>
+                            <span class="text-emerald-400 font-bold text-base">FREE OPERATIONAL ACCESS</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Module 1: The Baseline Hack -->
+            <section id="module-1" class="space-y-6 scroll-mt-20">
+                <div class="flex items-center justify-between border-b border-brand-border pb-3">
+                    <div class="flex items-center space-x-3">
+                        <span class="flex items-center justify-center w-8 h-8 rounded-lg bg-cyan-500/10 text-cyan-400 font-mono font-bold text-sm border border-cyan-500/20">01</span>
+                        <h2 class="text-2xl font-bold text-white">The Baseline Hack</h2>
+                    </div>
+                    <button onclick="bookmarkSection('Module 1: Baseline Hack')" class="text-xs text-gray-400 hover:text-purple-400 transition">
+                        <i class="fa-regular fa-bookmark mr-1"></i> Bookmark
+                    </button>
+                </div>
+
+                <div class="prose prose-invert max-w-none text-gray-300 leading-relaxed space-y-4">
+                    <p>
+                        Most people attempt to "read body language" by looking for generic isolated gestures (e.g., crossing arms = defensive). This is an amateur mistake.
+                    </p>
+                    <div class="p-4 rounded-xl bg-brand-card border border-brand-border border-l-4 border-l-cyan-400">
+                        <h3 class="text-white font-semibold text-sm uppercase font-mono mb-1 text-cyan-400">Core Axiom</h3>
+                        <p class="text-sm">
+                            You cannot detect a lie or emotional spike without first defining their <strong>Baseline</strong>—how they act, speak, blink, and move under zero pressure.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Interactive Baseline Simulator -->
+                <div id="tool-baseline" class="bg-brand-card rounded-xl border border-brand-border p-6 space-y-4">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-base font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-stopwatch text-cyan-400"></i> Interactive Tool: 7-Second Baseline Calibration
+                        </h3>
+                        <span class="text-xs font-mono text-cyan-400 bg-cyan-950/50 px-2 py-1 rounded border border-cyan-800">SIMULATOR</span>
+                    </div>
+
+                    <div id="baseline-sim" class="bg-brand-dark p-5 rounded-lg border border-brand-border space-y-4">
+                        <div class="flex justify-between items-center text-sm font-mono border-b border-brand-border pb-2">
+                            <span>SUBJECT: <span id="sim-target-name" class="text-purple-400">Target A</span></span>
+                            <span>TIME: <span id="sim-timer" class="text-cyan-400 font-bold">0.0s</span></span>
+                        </div>
+
+                        <div id="sim-display" class="min-h-[80px] flex items-center justify-center p-4 bg-brand-card/50 rounded-lg text-center text-gray-300 text-sm font-mono border border-dashed border-brand-border">
+                            Press "Start Baseline Scan" to begin.
+                        </div>
+
+                        <div class="flex gap-3">
+                            <button id="btn-start-baseline" onclick="runBaselineSim()" class="px-4 py-2 bg-cyan-600 hover:bg-cyan-500 text-white font-medium text-xs font-mono rounded-lg transition flex-1">
+                                <i class="fa-solid fa-play mr-1"></i> START BASELINE SCAN
+                            </button>
+                            <button id="btn-stress-baseline" onclick="triggerBaselineStress()" disabled class="px-4 py-2 bg-red-900/40 opacity-50 text-red-300 border border-red-800/50 font-medium text-xs font-mono rounded-lg transition flex-1">
+                                <i class="fa-solid fa-bolt mr-1"></i> INJECT PRESSURE
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Module 2: The Barnum Effect -->
+            <section id="module-2" class="space-y-6 scroll-mt-20">
+                <div class="flex items-center justify-between border-b border-brand-border pb-3">
+                    <div class="flex items-center space-x-3">
+                        <span class="flex items-center justify-center w-8 h-8 rounded-lg bg-purple-500/10 text-purple-400 font-mono font-bold text-sm border border-purple-500/20">02</span>
+                        <h2 class="text-2xl font-bold text-white">The Barnum Effect</h2>
+                    </div>
+                    <button onclick="bookmarkSection('Module 2: Barnum Effect')" class="text-xs text-gray-400 hover:text-purple-400 transition">
+                        <i class="fa-regular fa-bookmark mr-1"></i> Bookmark
+                    </button>
+                </div>
+
+                <div id="tool-barnum" class="bg-brand-card rounded-xl border border-brand-border p-6 space-y-4">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-base font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-sliders text-purple-400"></i> Interactive Tool: Barnum Statement Forge
+                        </h3>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs font-mono">
+                        <div>
+                            <label class="block text-gray-400 mb-1">TARGET ARCHETYPE</label>
+                            <select id="barnum-archetype" class="w-full bg-brand-dark border border-brand-border rounded-lg p-2.5 text-gray-200">
+                                <option value="ambitious">The High Achiever</option>
+                                <option value="introvert">The Quiet Observer</option>
+                                <option value="skeptic">The Guarded Skeptic</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-gray-400 mb-1">TACTICAL OBJECTIVE</label>
+                            <select id="barnum-objective" class="w-full bg-brand-dark border border-brand-border rounded-lg p-2.5 text-gray-200">
+                                <option value="trust">Build Immediate Trust</option>
+                                <option value="disarm">Disarm Defense Mechanisms</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button onclick="generateBarnum()" class="w-full py-2.5 bg-purple-600 hover:bg-purple-500 text-white font-medium text-xs font-mono rounded-lg transition">
+                        FORGE BARNUM SCRIPT
+                    </button>
+
+                    <div id="barnum-output" class="hidden p-4 bg-brand-dark rounded-lg border border-purple-800/40 text-sm text-purple-200">
+                        <div id="barnum-text"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Practice Simulator -->
+            <section id="simulator" class="space-y-6 scroll-mt-20">
+                <div class="flex items-center justify-between border-b border-brand-border pb-3">
+                    <div class="flex items-center space-x-3">
+                        <span class="flex items-center justify-center w-8 h-8 rounded-lg bg-red-500/10 text-red-400 font-mono font-bold text-sm border border-red-500/20">
+                            <i class="fa-solid fa-gamepad"></i>
+                        </span>
+                        <h2 class="text-2xl font-bold text-white">Scenario Practice Simulator</h2>
+                    </div>
+                </div>
+
+                <div class="bg-brand-card rounded-2xl border border-brand-border p-6 space-y-6 glow-red">
+                    <div class="flex items-center justify-between text-xs font-mono border-b border-brand-border pb-3">
+                        <span class="text-red-400 font-bold">SCENARIO: HIGH-STAKES NEGOTIATION</span>
+                        <span id="sim-score" class="text-gray-400">Tactical Score: 0/100</span>
+                    </div>
+
+                    <div id="scenario-box" class="space-y-4">
+                        <p class="text-sm text-gray-200">
+                            The stakeholder says: <em>"We simply do not have room in the budget this quarter."</em>
+                        </p>
+
+                        <div class="space-y-2 text-xs font-mono">
+                            <button onclick="chooseOption(1)" class="w-full text-left p-3 rounded-lg bg-brand-dark border border-brand-border hover:border-purple-500 transition">
+                                A) List past achievements to prove value.
+                            </button>
+                            <button onclick="chooseOption(2)" class="w-full text-left p-3 rounded-lg bg-brand-dark border border-brand-border hover:border-purple-500 transition">
+                                B) Pause 3 seconds and ask: "Is it a budget cap, or timing issue?"
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="scenario-feedback" class="hidden p-4 rounded-lg bg-brand-dark border border-brand-border text-xs">
+                        <div id="feedback-title" class="font-bold font-mono"></div>
+                        <p id="feedback-text" class="text-gray-300 mt-1"></p>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- Bookmarks Modal -->
+    <div id="bookmarks-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-brand-card border border-brand-border rounded-2xl max-w-md w-full p-6 space-y-4">
+            <h3 class="text-base font-bold text-white font-mono">Saved Bookmarks</h3>
+            <ul id="bookmarks-list" class="space-y-2 max-h-60 overflow-y-auto text-xs font-mono"></ul>
+            <button onclick="toggleBookmarksModal()" class="px-4 py-2 bg-brand-border text-gray-200 text-xs font-mono rounded-lg">Close</button>
+        </div>
+    </div>
+
+    <script>
+        const mainScroll = document.getElementById('main-scroll');
+        const progressBar = document.getElementById('progress-bar');
+        mainScroll.addEventListener('scroll', () => {
+            const scrollTop = mainScroll.scrollTop;
+            const scrollHeight = mainScroll.scrollHeight - mainScroll.clientHeight;
+            progressBar.style.width = ((scrollTop / scrollHeight) * 100) + '%';
+        });
+
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const sidebar = document.getElementById('sidebar');
+        mobileMenuBtn.addEventListener('click', () => sidebar.classList.toggle('-translate-x-full'));
+
+        let bookmarks = [];
+        function bookmarkSection(title) {
+            if (!bookmarks.includes(title)) {
+                bookmarks.push(title);
+                document.getElementById('bookmark-count').innerText = bookmarks.length;
+                alert(`Bookmarked: ${title}`);
+            }
+        }
+
+        function toggleBookmarksModal() {
+            const modal = document.getElementById('bookmarks-modal');
+            modal.classList.toggle('hidden');
+            const list = document.getElementById('bookmarks-list');
+            list.innerHTML = bookmarks.length ? bookmarks.map(b => `<li class="p-2 bg-brand-dark rounded border border-brand-border">${b}</li>`).join('') : '<li class="text-gray-500">No bookmarks saved.</li>';
+        }
+
+        let simInterval;
+        function runBaselineSim() {
+            const display = document.getElementById('sim-display');
+            const timer = document.getElementById('sim-timer');
+            const btn = document.getElementById('btn-stress-baseline');
+            let elapsed = 0;
+            display.innerHTML = '<span class="text-cyan-400">Scanning baseline: Normal blinks, relaxed posture.</span>';
+            btn.disabled = false;
+            btn.classList.remove('opacity-50');
+            clearInterval(simInterval);
+            simInterval = setInterval(() => {
+                elapsed += 0.5;
+                timer.innerText = elapsed.toFixed(1) + 's';
+                if (elapsed >= 7) {
+                    clearInterval(simInterval);
+                    display.innerHTML += '<br><span class="text-emerald-400">[BASELINE ESTABLISHED]</span>';
+                }
+            }, 500);
+        }
+
+        function triggerBaselineStress() {
+            document.getElementById('sim-display').innerHTML = '<span class="text-red-400 font-bold">[INCONGRUENCE DETECTED]:</span> Blink rate spiked to 48/min. Subject crossed arms.';
+        }
+
+        const barnumDb = {
+            ambitious: { trust: "You set extremely high standards for yourself and often feel others don't match your commitment.", disarm: "On the outside you show complete control, but inside you question your balance." },
+            introvert: { trust: "You observe far more than you say, valuing depth over superficial chat.", disarm: "You guard your energy until someone demonstrates real competence." },
+            skeptic: { trust: "You don't take things at face value, but respect someone who stands firm.", disarm: "You naturally look for flaws to protect your team." }
+        };
+
+        function generateBarnum() {
+            const arch = document.getElementById('barnum-archetype').value;
+            const obj = document.getElementById('barnum-objective').value;
+            document.getElementById('barnum-text').innerText = barnumDb[arch][obj];
+            document.getElementById('barnum-output').classList.remove('hidden');
+        }
+
+        function chooseOption(opt) {
+            const feedback = document.getElementById('scenario-feedback');
+            const title = document.getElementById('feedback-title');
+            const text = document.getElementById('feedback-text');
+            feedback.classList.remove('hidden');
+            if (opt === 2) {
+                title.className = "font-bold font-mono text-emerald-400";
+                title.innerText = "EXCELLENT EXECUTION (+100 PTS)";
+                text.innerText = "Pausing disrupted their default script and clarified actual constraints.";
+                document.getElementById('sim-score').innerText = "Tactical Score: 100/100";
+            } else {
+                title.className = "font-bold font-mono text-yellow-400";
+                title.innerText = "SUB-OPTIMAL (+30 PTS)";
+                text.innerText = "Defensively listing achievements triggers resistance.";
+                document.getElementById('sim-score').innerText = "Tactical Score: 30/100";
+            }
+        }
+    </script>
+</body>
+</html>
